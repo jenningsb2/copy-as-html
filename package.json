@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "copy-as-html",
 	"version": "1.0.1",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "This is a simple plugin that converts the selected markdown to HTML and copies it to the clipboard.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
