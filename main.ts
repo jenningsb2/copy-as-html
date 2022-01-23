@@ -20,8 +20,9 @@ export default class MarkdownToHTML extends Plugin {
 			let text = editor.getSelection();
 			let noBrackets = text.replace(/\[|\]/g, '');
 			const html = converter.makeHtml(noBrackets);
-			var blob = new Blob([html], {type:"text/html"})
-			var data = [new ClipboardItem({["text/html"]: blob})];
+			var blob = new Blob([html], {type:"text/html"});
+			//@ts-ignore
+			var data = [new ClipboardItem({[blob.type]: blob})];
 			//@ts-ignore
 			navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
 				if (result.state == "granted" || result.state == "prompt") {
@@ -32,7 +33,6 @@ export default class MarkdownToHTML extends Plugin {
 					})
 				}
 				})
-			navigator.clipboard.write(data)
 
 		}
 
