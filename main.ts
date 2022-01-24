@@ -18,7 +18,8 @@ export default class MarkdownToHTML extends Plugin {
 		markdownToHTML(editor: Editor) {
 			const converter = new showdown.Converter();
 			let text = editor.getSelection();
-			let noBrackets = text.replace(/\[|\]/g, '');
+			let onlyAlias = text.replace(/\[\[.+\|(.+)\]\]/g, '$1');
+			let noBrackets = onlyAlias.replace(/\[|\]/g, '');
 			const html = converter.makeHtml(noBrackets);
 			var blob = new Blob([html], {type:"text/html"});
 			//@ts-ignore
