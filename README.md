@@ -2,6 +2,8 @@
 
 This simple plugin converts the selected markdown to HTML using showdown and copies it to the clipboard.
 
+Command name: `Copy as HTML: Copy as HTML command`
+
 Platforms like Slack and Google Docs allow users to paste HTML into their text areas and maintain the original formatting for their notes. 
 
 The plugin can be beneficial when you need to copy your notes to share your work with others.
