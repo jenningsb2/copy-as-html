@@ -18,8 +18,7 @@ export default class MarkdownToHTML extends Plugin {
 		markdownToHTML(editor: Editor) {
 			const converter = new showdown.Converter();
 			let text = editor.getSelection();
-			let onlyAlias = text.replace(/\[\[.+\|(.+)\]\]/g, '$1');
-			let noBrackets = onlyAlias.replace(/\[|\]/g, '');
+			let noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
 			let html = converter.makeHtml(noBrackets).toString();
 			const withDivWrapper = `<!-- directives:[] -->
 			<div id="content">${html}</div>`;
