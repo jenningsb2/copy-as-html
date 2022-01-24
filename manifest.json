@@ -6,5 +6,5 @@
 	"description": "This is a simple plugin that converts the selected markdown to HTML and copies it to the clipboard.",
 	"author": "Bailey Jennings",
 	"authorUrl": "https://twitter.com/Bailey_Jennings",
-	"isDesktopOnly": true
+	"isDesktopOnly": false
 }
