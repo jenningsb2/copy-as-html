@@ -20,21 +20,22 @@ export default class MarkdownToHTML extends Plugin {
 			let text = editor.getSelection();
 			let onlyAlias = text.replace(/\[\[.+\|(.+)\]\]/g, '$1');
 			let noBrackets = onlyAlias.replace(/\[|\]/g, '');
-			const html = converter.makeHtml(noBrackets);
-			var blob = new Blob([html], {type:"text/html"});
+			let html = converter.makeHtml(noBrackets).toString();
+			const withDivWrapper = `<!-- directives:[] -->
+			<div id="content">${html}</div>`;
 			//@ts-ignore
-			var data = [new ClipboardItem({[blob.type]: blob})];
+			const blob = new Blob([withDivWrapper], {
+				//@ts-ignore
+				type: ["text/plain", "text/html"]
+			  })
+			const data = [new ClipboardItem({
+				//@ts-ignore
+				["text/plain"]: blob,
+				//@ts-ignore
+				["text/html"]: blob
+			  })];
 			//@ts-ignore
-			navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
-				if (result.state == "granted" || result.state == "prompt") {
-					navigator.clipboard.write(data).then(function() {
-					/* success */
-					}, function(e) {
-					console.log(e, "fail")
-					})
-				}
-				})
-
+			navigator.clipboard.write(data);
 		}
 
 		onunload() {
