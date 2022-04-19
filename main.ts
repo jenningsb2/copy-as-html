@@ -17,9 +17,12 @@ export default class MarkdownToHTML extends Plugin {
 
 		markdownToHTML(editor: Editor) {
 			const converter = new showdown.Converter();
-			let text = editor.getSelection();
-			let noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
-			let html = converter.makeHtml(noBrackets).toString();
+
+			converter.setOption('ellipsis', false);
+
+			const text = editor.getSelection();
+			const noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
+			const html = converter.makeHtml(noBrackets).toString();
 			const withDivWrapper = `<!-- directives:[] -->
 			<div id="content">${html}</div>`;
 			//@ts-ignore
@@ -38,6 +41,6 @@ export default class MarkdownToHTML extends Plugin {
 		}
 
 		onunload() {
-	
+
 		}
 	}
