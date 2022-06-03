@@ -17,6 +17,7 @@ export default class MarkdownToHTML extends Plugin {
 
 		markdownToHTML(editor: Editor) {
 			const converter = new showdown.Converter();
+			converter.setFlavor('github');
 			let text = editor.getSelection();
 			let noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
 			let html = converter.makeHtml(noBrackets).toString();
