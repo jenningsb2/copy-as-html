@@ -13,32 +13,33 @@ export default class MarkdownToHTML extends Plugin {
 			editorCallback: (editor: any) => this.markdownToHTML(editor)
 		});
 
-		}
-
-		markdownToHTML(editor: Editor) {
-			const converter = new showdown.Converter();
-			converter.setFlavor('github');
-			let text = editor.getSelection();
-			let noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
-			let html = converter.makeHtml(noBrackets).toString();
-			const withDivWrapper = `<!-- directives:[] -->
-			<div id="content">${html}</div>`;
-			//@ts-ignore
-			const blob = new Blob([withDivWrapper], {
-				//@ts-ignore
-				type: ["text/plain", "text/html"]
-			  })
-			const data = [new ClipboardItem({
-				//@ts-ignore
-				["text/plain"]: blob,
-				//@ts-ignore
-				["text/html"]: blob
-			  })];
-			//@ts-ignore
-			navigator.clipboard.write(data);
-		}
-
-		onunload() {
-	
-		}
 	}
+
+	markdownToHTML(editor: Editor) {
+		const converter = new showdown.Converter();
+		converter.setFlavor('github');
+		converter.setOption('ellipsis', false);
+		const text = editor.getSelection();
+		const noBrackets = text.replace(/\[\[(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
+		const html = converter.makeHtml(noBrackets).toString();
+		const withDivWrapper = `<!-- directives:[] -->
+			<div id="content">${html}</div>`;
+		//@ts-ignore
+		const blob = new Blob([withDivWrapper], {
+			//@ts-ignore
+			type: ["text/plain", "text/html"]
+		})
+		const data = [new ClipboardItem({
+			//@ts-ignore
+			["text/plain"]: blob,
+			//@ts-ignore
+			["text/html"]: blob
+		})];
+		//@ts-ignore
+		navigator.clipboard.write(data);
+	}
+
+	onunload() {
+
+	}
+}

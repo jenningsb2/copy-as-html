@@ -24,6 +24,6 @@
 		"typescript": "4.4.4"
 	},
 	"dependencies": {
-		"showdown": "^1.9.1"
+		"showdown": "^2.1.0"
 	}
 }
