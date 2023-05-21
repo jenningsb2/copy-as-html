@@ -1,5 +1,3 @@
- ### **This plugin is no longer being supported/updated. I no longer am using Obisidian. If someone would like to take over this repo, please reach out.**
-
 ## Copy as HTML Obsidian Plugin
 
 This simple plugin converts the selected markdown to HTML using showdown and copies it to the clipboard.
