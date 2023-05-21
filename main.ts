@@ -5,6 +5,7 @@ interface MarkdownToHTMLSettings {
     removeBrackets: boolean;
     removeEmphasis: boolean;
     removeTags: boolean;
+    removeComments: boolean;
   }
   
 
@@ -12,6 +13,7 @@ interface MarkdownToHTMLSettings {
     removeBrackets: true,
     removeEmphasis: false,
     removeTags: false,
+    removeComments: false
   };
 
 export default class MarkdownToHTML extends Plugin {
@@ -44,6 +46,10 @@ export default class MarkdownToHTML extends Plugin {
           
         if (this.settings.removeTags) {
             text = text.replace(/#\w+/g, '');
+          }
+
+        if (this.settings.removeComments) {
+            text = text.replace(/%%.+%%/g, '');
           }
         const html = converter.makeHtml(text).toString();
         const withDivWrapper = `<!-- directives:[] -->
@@ -118,6 +124,16 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.removeTags)
           .onChange(async (value) => {
             this.plugin.settings.removeTags = value;
+            await this.plugin.saveSettings();
+          }));
+
+        new Setting(containerEl)
+        .setName("Remove comments")
+        .setDesc("If enabled, removes commented text.")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.removeComments)
+          .onChange(async (value) => {
+            this.plugin.settings.removeComments = value;
             await this.plugin.saveSettings();
           }));
     }
