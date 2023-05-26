@@ -37,7 +37,7 @@ export default class MarkdownToHTML extends Plugin {
         text = text.replace(/==/g, ''); //removing highlighted text emphasis (showdown doesn't handle it)
         text = text.replace(/\^\w+/g, ''); //removing block reference ids
         if (this.settings.removeBrackets) {
-            text = text.replace(/\[\[(?:.*\/)?(?:[^\]]+\|)?([^\]]+)\]\]/g, '$1');
+            text = text.replace(/\[\[(.*?)\]\]/g, '$1');
           }
           
         if (this.settings.removeEmphasis) {
