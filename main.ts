@@ -6,6 +6,7 @@ interface MarkdownToHTMLSettings {
     removeEmphasis: boolean;
     removeTags: boolean;
     removeComments: boolean;
+    convertArrows: boolean;
   }
   
 
@@ -13,7 +14,8 @@ interface MarkdownToHTMLSettings {
     removeBrackets: true,
     removeEmphasis: false,
     removeTags: false,
-    removeComments: false
+    removeComments: false,
+    convertArrows: false
   };
 
 export default class MarkdownToHTML extends Plugin {
@@ -136,6 +138,17 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
             this.plugin.settings.removeComments = value;
             await this.plugin.saveSettings();
           }));
+          
+        new Setting(containerEl)
+        .setName("Convert Arrows")
+        .setDesc("If enabled, converts ASCII Arrows to UTF-8")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.convertArrows)
+          .onChange(async (value) => {
+            this.plugin.settings.removeTags = value;
+            await this.plugin.saveSettings();
+          }));  
+
     }
   }
   
