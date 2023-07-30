@@ -41,7 +41,6 @@ export default class MarkdownToHTML extends Plugin {
         if (this.settings.removeBrackets) {
             text = text.replace(/\[\[(.*?)\]\]/g, '$1');
           }
-          
         if (this.settings.removeEmphasis) {
             text = text.replace(/[*~]+(\w+)[*~]+/g, '$1');
           }
@@ -53,6 +52,14 @@ export default class MarkdownToHTML extends Plugin {
         if (this.settings.removeComments) {
             text = text.replace(/%%.+%%/g, '');
           }
+        if (this.settings.convertArrows) {
+    	text = text.replace(/(?<!<)->/g, '&rarr;');
+    	text = text.replace(/<-(?!>)/g, '&larr;');
+    	text = text.replace(/<->/g, '&harr;');
+    	text = text.replace(/(?<!<)=>/g, '&rArr;');
+    	text = text.replace(/<=>/g, '&hArr;');
+	  }  
+          
         const html = converter.makeHtml(text).toString();
         const withDivWrapper = `<!-- directives:[] -->
             <div id="content">${html}</div>`;
@@ -145,7 +152,7 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
         .addToggle(toggle => toggle
           .setValue(this.plugin.settings.convertArrows)
           .onChange(async (value) => {
-            this.plugin.settings.removeTags = value;
+            this.plugin.settings.convertArrows = value;
             await this.plugin.saveSettings();
           }));  
 
