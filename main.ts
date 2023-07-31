@@ -6,6 +6,7 @@ interface MarkdownToHTMLSettings {
     removeEmphasis: boolean;
     removeTags: boolean;
     removeComments: boolean;
+    toAnkiMathJax: boolean;
   }
   
 
@@ -13,7 +14,8 @@ interface MarkdownToHTMLSettings {
     removeBrackets: true,
     removeEmphasis: false,
     removeTags: false,
-    removeComments: false
+    removeComments: false,
+    toAnkiMathJax: false,
   };
 
 export default class MarkdownToHTML extends Plugin {
@@ -134,6 +136,15 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.removeComments)
           .onChange(async (value) => {
             this.plugin.settings.removeComments = value;
+            await this.plugin.saveSettings();
+          }));
+	new Setting(containerEl)
+        .setName("Convert MathJax to Anki-MathJax")
+        .setDesc("If enabled, replaces $ with the notation used by the Anki Flashcard application")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.toAnkiMathJax)
+          .onChange(async (value) => {
+            this.plugin.settings.toAnkiMathJax = value;
             await this.plugin.saveSettings();
           }));
     }
