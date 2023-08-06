@@ -147,8 +147,8 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
           }));
           
         new Setting(containerEl)
-        .setName("Convert Arrows")
-        .setDesc("If enabled, converts ASCII Arrows to UTF-8")
+        .setName("Convert arrows")
+        .setDesc("If enabled, converts ASCII arrows to UTF-8 arrows")
         .addToggle(toggle => toggle
           .setValue(this.plugin.settings.convertArrows)
           .onChange(async (value) => {
