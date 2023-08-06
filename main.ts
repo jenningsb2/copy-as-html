@@ -55,7 +55,7 @@ export default class MarkdownToHTML extends Plugin {
           }
 	if (this.settings.toAnkiMathJax) {
 	    text = text.replace(/\$\$((.|\n)*?)\$\$/g,'<anki-mathjax block=true> $1 </anki-mathjax>');
-	    text = text.replace(/\$(.+)\$/g,'<anki-mathjax> $1 </anki-mathjax>');
+	    text = text.replace(/\$(.+?)\$/g,'<anki-mathjax> $1 </anki-mathjax>');
 	  }
           
         const html = converter.makeHtml(text).toString();
