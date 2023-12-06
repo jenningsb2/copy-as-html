@@ -6,6 +6,7 @@ interface MarkdownToHTMLSettings {
     removeEmphasis: boolean;
     removeTags: boolean;
     removeComments: boolean;
+    simpleLineBreaks: boolean;
   }
   
 
@@ -13,7 +14,8 @@ interface MarkdownToHTMLSettings {
     removeBrackets: true,
     removeEmphasis: false,
     removeTags: false,
-    removeComments: false
+    removeComments: false,
+    simpleLineBreaks: false,
   };
 
 export default class MarkdownToHTML extends Plugin {
@@ -51,6 +53,11 @@ export default class MarkdownToHTML extends Plugin {
         if (this.settings.removeComments) {
             text = text.replace(/%%.+%%/g, '');
           }
+
+        if (this.settings.simpleLineBreaks) {
+          // Allows "semantic line breaks" when writing one sentence per line in Markdown
+          converter.setOption('simpleLineBreaks', false);
+        }          
         const html = converter.makeHtml(text).toString();
         const withDivWrapper = `<!-- directives:[] -->
             <div id="content">${html}</div>`;
@@ -134,6 +141,16 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.removeComments)
           .onChange(async (value) => {
             this.plugin.settings.removeComments = value;
+            await this.plugin.saveSettings();
+          }));
+
+        new Setting(containerEl)
+        .setName("Remove line breaks")
+        .setDesc("If enabled, prevents <br> tags in copied output.")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.simpleLineBreaks)
+          .onChange(async (value) => {
+            this.plugin.settings.simpleLineBreaks = value;
             await this.plugin.saveSettings();
           }));
     }
