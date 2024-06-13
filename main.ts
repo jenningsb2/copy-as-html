@@ -6,6 +6,8 @@ interface MarkdownToHTMLSettings {
     removeEmphasis: boolean;
     removeTags: boolean;
     removeComments: boolean;
+    convertArrows: boolean;
+    toAnkiMathJax: boolean;
   }
   
 
@@ -13,7 +15,9 @@ interface MarkdownToHTMLSettings {
     removeBrackets: true,
     removeEmphasis: false,
     removeTags: false,
-    removeComments: false
+    removeComments: false,
+    convertArrows: false,
+    toAnkiMathJax: false
   };
 
 export default class MarkdownToHTML extends Plugin {
@@ -39,7 +43,6 @@ export default class MarkdownToHTML extends Plugin {
         if (this.settings.removeBrackets) {
             text = text.replace(/\[\[(.*?)\]\]/g, '$1');
           }
-          
         if (this.settings.removeEmphasis) {
             text = text.replace(/[*~]+(\w+)[*~]+/g, '$1');
           }
@@ -51,6 +54,21 @@ export default class MarkdownToHTML extends Plugin {
         if (this.settings.removeComments) {
             text = text.replace(/%%.+%%/g, '');
           }
+
+        if (this.settings.convertArrows) {
+    	text = text.replace(/(?<!<)->/g, '&rarr;');
+    	text = text.replace(/<-(?!>)/g, '&larr;');
+    	text = text.replace(/<->/g, '&harr;');
+    	text = text.replace(/(?<!<)=>/g, '&rArr;');
+    	text = text.replace(/<=>/g, '&hArr;');
+	  }  
+
+	if (this.settings.toAnkiMathJax) {
+	    text = text.replace(/\$\$((.|\n)*?)\$\$/g,'<anki-mathjax block=true> $1 </anki-mathjax>');
+	    text = text.replace(/\$(.+?)\$/g,'<anki-mathjax> $1 </anki-mathjax>');
+	  }
+
+          
         const html = converter.makeHtml(text).toString();
         const withDivWrapper = `<!-- directives:[] -->
             <div id="content">${html}</div>`;
@@ -136,6 +154,29 @@ class MarkdownToHTMLSettingTab extends PluginSettingTab {
             this.plugin.settings.removeComments = value;
             await this.plugin.saveSettings();
           }));
+
+          
+        new Setting(containerEl)
+        .setName("Convert arrows")
+        .setDesc("If enabled, converts ASCII arrows to UTF-8 arrows")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.convertArrows)
+          .onChange(async (value) => {
+            this.plugin.settings.convertArrows = value;
+            await this.plugin.saveSettings();
+          }));  
+
+
+	new Setting(containerEl)
+        .setName("Convert MathJax to Anki-MathJax")
+        .setDesc("If enabled, replaces $ with the notation used by the Anki Flashcard application")
+        .addToggle(toggle => toggle
+          .setValue(this.plugin.settings.toAnkiMathJax)
+          .onChange(async (value) => {
+            this.plugin.settings.toAnkiMathJax = value;
+            await this.plugin.saveSettings();
+          }));
+
     }
   }
   
